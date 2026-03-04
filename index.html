@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Comercial - Agroconsulta</title>
+    
+    <!-- 1. Importamos Tailwind CSS para el diseño -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Importamos React para la lógica -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- 3. Importamos Babel para que el navegador entienda el código JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        /* Aseguramos que al imprimir el fondo sea blanco */
+        @media print {
+            body { background-color: white !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-200">
+    
+    <!-- Aquí es donde React inyectará nuestra aplicación -->
+    <div id="root"></div>
+
+    <!-- Escribimos nuestro código React aquí dentro (type="text/babel") -->
+    <script type="text/babel">
+        const { useState } = React;
+
+        // --- ICONOS (Reemplazo de lucide-react para un solo archivo HTML) ---
+        const FileText = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>;
+        const Download = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
+        const Building2 = () => <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>;
+        const MapPin = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>;
+        const Phone = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>;
+        const Mail = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>;
+        const CheckCircle = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "text-emerald-600 mt-0.5 flex-shrink-0"}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
+
+        function App() {
+          const [proposalData, setProposalData] = useState({
+            company: {
+              name: "Agroconsulta",
+              representative: "Leandro Javier Garcia",
+              address: "San Juan",
+              city: "San Juan, Argentina",
+              phone: "+54 9 351 517-3310",
+              email: "garciaejarquel@gmail.com"
+            },
+            client: {
+              name: "Solfrut",
+              contact: "Atte: Sector compras",
+              address: "",
+              email: ""
+            },
+            details: {
+              title: "OPTIMIZACIÓN DE PODA ESTRUCTURAL – PISTACHO",
+              campaign: "Campaña 2026",
+              quoteNumber: "COT-2026-0043",
+              date: new Date().toLocaleDateString('es-AR'),
+              validity: "Sujeta a stock",
+            },
+            products: [
+              {
+                id: 1,
+                name: "Bahco BCL240",
+                description: "Tijera eléctrica. Capacidad de corte hasta 40 mm. Indicada para formación de plantas jóvenes y manejo estructural en árboles adultos.",
+                quantity: 10,
+                unitPrice: 866192.25
+              },
+              {
+                id: 2,
+                name: "Bahco BCL25TP",
+                description: "Pértiga telescópica compatible con BCL240. Permite realizar trabajos en altura sin escalera, mejorando seguridad y eficiencia.",
+                quantity: 10,
+                unitPrice: 432353.25
+              }
+            ],
+            taxRate: 0.21
+          });
+
+          const subtotal = proposalData.products.reduce((acc, item) => acc + (item.quantity * item.unitPrice), 0);
+          const taxes = subtotal * proposalData.taxRate;
+          const total = subtotal + taxes;
+
+          const formatCurrency = (amount) => {
+            return new Intl.NumberFormat('es-AR', {
+              style: 'currency',
+              currency: 'ARS',
+              minimumFractionDigits: 2
+            }).format(amount);
+          };
+
+          const handleDownloadPDF = () => {
+            window.print();
+          };
+
+          return (
+            <div className="min-h-screen bg-gray-200 py-8 print:py-0 print:bg-white flex justify-center font-sans text-gray-800">
+              <div className="w-full max-w-4xl bg-white shadow-2xl rounded-lg overflow-hidden print:shadow-none print:rounded-none">
+                
+                <div className="bg-emerald-800 text-white p-4 flex justify-between items-center print:hidden rounded-t-lg">
+                  <div className="flex items-center gap-2">
+                    <FileText />
+                    <h1 className="font-semibold text-lg">Editor de Propuesta: Agroconsulta</h1>
+                  </div>
+                  <button 
+                    onClick={handleDownloadPDF}
+                    className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-md transition-colors font-semibold shadow-md"
+                  >
+                    <Download />
+                    Descargar PDF (Instantáneo)
+                  </button>
+                </div>
+
+                <div className="p-10 sm:p-14 print:p-0 print:m-0">
+                  <div className="flex justify-between items-start border-b-2 border-emerald-700 pb-6 mb-6">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2 text-emerald-800">
+                        <Building2 />
+                        <h2 className="text-4xl font-black tracking-tighter uppercase">{proposalData.company.name}</h2>
+                      </div>
+                      <div className="text-sm text-gray-600 flex flex-wrap gap-x-4 gap-y-2 mt-1">
+                        <span className="flex items-center gap-1 font-bold text-emerald-900">{proposalData.company.representative}</span>
+                        <span className="flex items-center gap-1"><Phone /> {proposalData.company.phone}</span>
+                        <span className="flex items-center gap-1"><Mail /> {proposalData.company.email}</span>
+                        <span className="flex items-center gap-1"><MapPin /> {proposalData.company.city}</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <h1 className="text-3xl font-light text-emerald-800/40 mb-1 uppercase tracking-widest">Propuesta</h1>
+                      <p className="text-sm font-bold text-emerald-900">{proposalData.details.quoteNumber}</p>
+                      <p className="text-sm text-gray-600">Fecha: {proposalData.details.date}</p>
+                    </div>
+                  </div>
+
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold text-gray-900">{proposalData.details.title}</h2>
+                    <h3 className="text-lg text-emerald-700 font-medium">{proposalData.details.campaign}</h3>
+                    <p className="text-sm text-gray-500 mt-1">Tecnología Profesional para Frutales</p>
+                  </div>
+
+                  <div className="mb-8 bg-slate-50 p-6 rounded-lg print:bg-white print:border print:p-4">
+                    <h3 className="text-xs font-bold uppercase text-emerald-600 mb-2 tracking-wider">Preparado para:</h3>
+                    <p className="text-xl font-bold text-gray-900">{proposalData.client.name}</p>
+                    <p className="text-sm text-gray-700 font-medium mt-1">{proposalData.client.contact}</p>
+                  </div>
+
+                  <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+                    {/* Columna Izquierda: Visita y Comunidad */}
+                    <div className="pt-2">
+                      <h4 className="font-bold text-emerald-800 uppercase mb-2 border-b border-emerald-100 pb-1">1. Visita Técnica y Comunidad +VOS</h4>
+                      <p className="text-gray-700 text-justify leading-relaxed mb-3">
+                        Durante la visita realizada a la finca, el equipo de Agroconsulta demostró el funcionamiento de las herramientas. La experiencia evidenció cómo la tecnología eléctrica aplicada a la poda aumenta la confianza del operario, reduce el esfuerzo físico y mejora la calidad del trabajo.
+                      </p>
+                      <p className="text-gray-700 text-justify leading-relaxed mb-3">
+                        A partir de esta iniciativa, invitamos a <strong>SolFrut</strong> a integrarse a la <strong>comunidad +VOS</strong> (Sinergia entre insumos y servicios), un espacio orientado a fortalecer la cadena de valor agrícola en San Juan articulando innovación productiva.
+                      </p>
+                      <p className="text-gray-700 text-justify leading-relaxed">
+                        Esta inversión estratégica impacta simultáneamente en tres dimensiones clave:
+                      </p>
+                      <ul className="list-disc list-inside space-y-1 text-gray-700 ml-2 mt-2">
+                        <li><strong>Productividad:</strong> mayor eficiencia operativa y velocidad.</li>
+                        <li><strong>Calidad técnica:</strong> cortes más precisos y uniformes.</li>
+                        <li><strong>Impacto social:</strong> mejora en condiciones laborales del equipo.</li>
+                      </ul>
+                    </div>
+
+                    {/* Columna Derecha: Capacitación y Beneficios (RESALTADA EN NARANJA) */}
+                    <div className="bg-orange-50 border border-orange-200 p-6 rounded-xl shadow-sm print:shadow-none print:border-orange-300">
+                      <h4 className="font-bold text-orange-800 uppercase mb-3 border-b border-orange-200 pb-2">2. Acompañamiento y Beneficios Exclusivos</h4>
+                      
+                      <div className="bg-orange-100/80 border border-orange-200 p-3 rounded-lg mb-4 flex items-start gap-2">
+                        <CheckCircle className="text-orange-600 mt-0.5 flex-shrink-0" />
+                        <p className="text-orange-900 text-sm font-medium leading-snug">
+                          Al ser <strong>oficiales de Bahco</strong>, aseguramos respaldo técnico directo, trazabilidad en cada equipo y logística garantizada.
+                        </p>
+                      </div>
+
+                      <p className="text-gray-800 text-justify leading-relaxed mb-4">
+                        Agroconsulta acompañará la implementación para asegurar mayor vida útil y profesionalización, enfocándose mediante capacitaciones en: <strong className="text-orange-900">uso correcto y seguro, buenas prácticas de poda y mantenimiento preventivo.</strong>
+                      </p>
+                      <p className="text-orange-900 font-bold mb-3">Beneficios al acceder a la red +VOS:</p>
+                      <ul className="space-y-2.5 text-gray-800">
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="text-orange-500 mt-0.5 flex-shrink-0" />
+                          <span>Condiciones preferenciales en herramientas Bahco.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="text-orange-500 mt-0.5 flex-shrink-0" />
+                          <span>Descuentos exclusivos en repuestos originales.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="text-orange-500 mt-0.5 flex-shrink-0" />
+                          <span>Servicio de revisión y reparación previo a cada temporada.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="text-orange-500 mt-0.5 flex-shrink-0" />
+                          <span>Acceso a capacitaciones técnicas y jornadas de campo.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="text-orange-500 mt-0.5 flex-shrink-0" />
+                          <span>Integración a una red de empresas que buscan eficiencia y sostenibilidad.</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="mb-8">
+                    <h4 className="font-bold text-emerald-800 uppercase mb-3 border-b border-emerald-100 pb-1 text-sm">3. Inversión en Equipos (Bahco)</h4>
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-emerald-50 text-sm uppercase tracking-wider text-emerald-900">
+                          <th className="py-3 px-3 font-bold w-1/2 rounded-tl-md">Equipo / Descripción</th>
+                          <th className="py-3 px-3 font-bold text-center">Cant.</th>
+                          <th className="py-3 px-3 font-bold text-right">Valor Unit.</th>
+                          <th className="py-3 px-3 font-bold text-right rounded-tr-md">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-emerald-100">
+                        {proposalData.products.map((product) => (
+                          <tr key={product.id} className="text-sm group">
+                            <td className="py-4 px-3 align-top">
+                              <p className="font-bold text-gray-900 text-base">{product.name}</p>
+                              <p className="text-gray-600 mt-1 leading-relaxed">{product.description}</p>
+                            </td>
+                            <td className="py-4 px-3 text-center text-gray-800 font-medium align-top">{product.quantity}</td>
+                            <td className="py-4 px-3 text-right text-gray-800 align-top">{formatCurrency(product.unitPrice)}</td>
+                            <td className="py-4 px-3 text-right font-bold text-emerald-900 align-top">{formatCurrency(product.quantity * product.unitPrice)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row justify-between items-start gap-8 mb-12">
+                    <div className="bg-slate-50 p-5 rounded-lg border border-slate-200 w-full sm:w-1/2 print:border-none print:bg-gray-50">
+                      <h4 className="font-bold text-gray-800 mb-2 uppercase text-xs tracking-wider">Condiciones Comerciales y de Pago</h4>
+                      <ul className="text-sm text-gray-700 space-y-2">
+                        <li><span className="font-semibold text-gray-900">Medio de pago:</span> Cheque electrónico (eCheq).</li>
+                        <li><span className="font-semibold text-gray-900">Plazos estándar:</span> 30 – 60 – 90 días.</li>
+                        <li><span className="font-semibold text-gray-900">Plazo extendido:</span> A 120 días (aplica un interés del 4% sobre el total).</li>
+                      </ul>
+                    </div>
+
+                    <div className="w-full sm:w-1/2 max-w-sm ml-auto">
+                      <div className="flex justify-between py-2 text-sm text-gray-600">
+                        <span>Subtotal Equipos</span>
+                        <span>{formatCurrency(subtotal)}</span>
+                      </div>
+                      <div className="flex justify-between py-2 text-sm text-gray-600">
+                        <span>IVA ({(proposalData.taxRate * 100).toFixed(1)}%)</span>
+                        <span>{formatCurrency(taxes)}</span>
+                      </div>
+                      <div className="flex justify-between py-3 border-t-2 border-emerald-800 mt-1 bg-emerald-50 px-3 rounded-sm print:bg-transparent">
+                        <span className="text-lg font-black text-emerald-900 uppercase">Total Final</span>
+                        <span className="text-lg font-black text-emerald-900">{formatCurrency(total)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t-2 border-gray-100 pt-6 mt-8 text-xs text-gray-500">
+                    <h4 className="font-bold text-gray-700 mb-2 uppercase tracking-wider">Condiciones Generales</h4>
+                    <ul className="list-disc list-inside space-y-1.5 columns-1 sm:columns-2">
+                      <li>Valores expresados en pesos argentinos (ARS), más IVA.</li>
+                      <li>Oferta sujeta a disponibilidad de stock en el momento de la confirmación.</li>
+                      <li>La confirmación del pedido permite coordinar entrega.</li>
+                      <li><strong>Incluye:</strong> Acompañamiento técnico y capacitación.</li>
+                    </ul>
+                    <p className="mt-6 text-center italic font-medium text-emerald-800/80">
+                      "Desde Agroconsulta entendemos que la tecnología genera confianza, y la sostenibilidad construye valor en el tiempo. Este proyecto busca integrar ambas dimensiones para fortalecer el desarrollo productivo de la región."
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // Renderizamos la aplicación
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
