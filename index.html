@@ -31,7 +31,7 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // --- ICONOS (Reemplazo de lucide-react para un solo archivo HTML) ---
+        // --- ICONOS ---
         const FileText = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>;
         const Download = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
         const Building2 = () => <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>;
@@ -51,7 +51,7 @@
               email: "garciaejarquel@gmail.com"
             },
             client: {
-              name: "Solfrut",
+              name: "Frutos del Sol",
               contact: "Atte: Sector compras",
               address: "",
               email: ""
@@ -60,7 +60,7 @@
               title: "OPTIMIZACIÓN DE PODA ESTRUCTURAL – PISTACHO",
               campaign: "Campaña 2026",
               quoteNumber: "COT-2026-0043",
-              date: new Date().toLocaleDateString('es-AR'),
+              date: "4/3/2026",
               validity: "Sujeta a stock",
             },
             products: [
@@ -105,14 +105,14 @@
                 <div className="bg-emerald-800 text-white p-4 flex justify-between items-center print:hidden rounded-t-lg">
                   <div className="flex items-center gap-2">
                     <FileText />
-                    <h1 className="font-semibold text-lg">Editor de Propuesta: Agroconsulta</h1>
+                    <h1 className="font-semibold text-lg">Propuesta Comercial: {proposalData.client.name}</h1>
                   </div>
                   <button 
                     onClick={handleDownloadPDF}
                     className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-md transition-colors font-semibold shadow-md"
                   >
                     <Download />
-                    Descargar PDF (Instantáneo)
+                    Descargar PDF
                   </button>
                 </div>
 
@@ -150,14 +150,14 @@
                   </div>
 
                   <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
-                    {/* Columna Izquierda: Visita y Comunidad */}
+                    {/* Columna Izquierda: Relevamiento y Comunidad */}
                     <div className="pt-2">
-                      <h4 className="font-bold text-emerald-800 uppercase mb-2 border-b border-emerald-100 pb-1">1. Visita Técnica y Comunidad +VOS</h4>
+                      <h4 className="font-bold text-emerald-800 uppercase mb-2 border-b border-emerald-100 pb-1">1. Relevamiento Técnico y Comunidad +VOS</h4>
                       <p className="text-gray-700 text-justify leading-relaxed mb-3">
-                        Durante la visita realizada a la finca, el equipo de Agroconsulta demostró el funcionamiento de las herramientas. La experiencia evidenció cómo la tecnología eléctrica aplicada a la poda aumenta la confianza del operario, reduce el esfuerzo físico y mejora la calidad del trabajo.
+                        En función de la información relevada por el equipo de Agroconsulta durante el año pasado y la presente campaña, hemos identificado oportunidades clave para optimizar las labores de poda. Los datos obtenidos evidencian que la implementación de tecnología eléctrica no solo aumenta la confianza del operario, sino que reduce significativamente el esfuerzo físico y mejora la precisión técnica en el campo.
                       </p>
                       <p className="text-gray-700 text-justify leading-relaxed mb-3">
-                        A partir de esta iniciativa, invitamos a <strong>SolFrut</strong> a integrarse a la <strong>comunidad +VOS</strong> (Sinergia entre insumos y servicios), un espacio orientado a fortalecer la cadena de valor agrícola en San Juan articulando innovación productiva.
+                        A partir de este análisis, invitamos a <strong>{proposalData.client.name}</strong> a integrarse a la <strong>comunidad +VOS</strong> (Sinergia entre insumos y servicios), un espacio orientado a fortalecer la cadena de valor agrícola en San Juan articulando innovación productiva.
                       </p>
                       <p className="text-gray-700 text-justify leading-relaxed">
                         Esta inversión estratégica impacta simultáneamente en tres dimensiones clave:
@@ -169,7 +169,7 @@
                       </ul>
                     </div>
 
-                    {/* Columna Derecha: Capacitación y Beneficios (RESALTADA EN NARANJA) */}
+                    {/* Columna Derecha: Capacitación y Beneficios */}
                     <div className="bg-orange-50 border border-orange-200 p-6 rounded-xl shadow-sm print:shadow-none print:border-orange-300">
                       <h4 className="font-bold text-orange-800 uppercase mb-3 border-b border-orange-200 pb-2">2. Acompañamiento y Beneficios Exclusivos</h4>
                       
@@ -271,7 +271,7 @@
                       <li><strong>Incluye:</strong> Acompañamiento técnico y capacitación.</li>
                     </ul>
                     <p className="mt-6 text-center italic font-medium text-emerald-800/80">
-                      "Desde Agroconsulta entendemos que la tecnología genera confianza, y la sostenibilidad construye valor en el tiempo. Este proyecto busca integrar ambas dimensiones para fortalecer el desarrollo productivo de la región."
+                      "Desde Agroconsulta entendemos que la tecnología genera confianza, y la sostenibilidad construye valor en el tiempo. Este proyecto busca integrar los relevamientos realizados con soluciones técnicas que fortalezcan el desarrollo productivo de Frutos del Sol."
                     </p>
                   </div>
 
